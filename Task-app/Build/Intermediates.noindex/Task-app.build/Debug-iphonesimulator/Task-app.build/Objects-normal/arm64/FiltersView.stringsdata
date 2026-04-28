@@ -1,0 +1,56 @@
+{
+  "source": "/Users/fazilp/SwiftUI-Project/new 1%/Task-app/Task-app/Movies/View/FiltersView.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "FILTERS",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 82
+        }
+      },
+      {
+        "comment": "",
+        "key": "Reset",
+        "location": {
+          "startingColumn": 20,
+          "startingLine": 88
+        }
+      },
+      {
+        "comment": "",
+        "key": "Search by movie title...",
+        "location": {
+          "startingColumn": 27,
+          "startingLine": 105
+        }
+      },
+      {
+        "comment": "",
+        "key": "From",
+        "location": {
+          "startingColumn": 21,
+          "startingLine": 180
+        }
+      },
+      {
+        "comment": "",
+        "key": "To",
+        "location": {
+          "startingColumn": 21,
+          "startingLine": 191
+        }
+      },
+      {
+        "comment": "",
+        "key": "Apply Filters",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 214
+        }
+      }
+    ]
+  },
+  "version": 1
+}

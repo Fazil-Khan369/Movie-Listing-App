@@ -1,0 +1,48 @@
+{
+  "source": "/Users/fazilp/SwiftUI-Project/new 1%/Task-app/Task-app/Movies/View/MovieListView.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "CINEVIEW",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 128
+        }
+      },
+      {
+        "comment": "",
+        "key": "Search movies, shows, genres...",
+        "location": {
+          "startingColumn": 27,
+          "startingLine": 152
+        }
+      },
+      {
+        "comment": "",
+        "key": "No movies match your filters yet.",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 238
+        }
+      },
+      {
+        "comment": "",
+        "key": "Loading more...",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 232
+        }
+      },
+      {
+        "comment": "",
+        "key": "You've reached the end",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 245
+        }
+      }
+    ]
+  },
+  "version": 1
+}

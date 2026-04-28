@@ -1,0 +1,2 @@
+Target dependency graph (1 target)
+Target 'Task-app' in project 'Task-app' (no dependencies)
