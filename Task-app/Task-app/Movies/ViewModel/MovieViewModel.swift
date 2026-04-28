@@ -216,7 +216,8 @@ final class MovieViewModel: ObservableObject {
 
     func updateFilters(title: String, year: String?, fromDate: Date?, toDate: Date?) async {
         searchText = title.trimmingCharacters(in: .whitespacesAndNewlines)
-        selectedYear = year
+        let normalizedYear = year?.trimmingCharacters(in: .whitespacesAndNewlines)
+        selectedYear = (normalizedYear?.isEmpty ?? true) ? nil : normalizedYear
         self.fromDate = fromDate
         self.toDate = toDate
         await loadMovies(reset: true)

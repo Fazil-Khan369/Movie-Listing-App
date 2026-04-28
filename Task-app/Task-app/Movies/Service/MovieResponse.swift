@@ -23,6 +23,13 @@ struct MovieResponse: Codable {
         case totalResults = "total_results"
     }
 
+    init(page: Int, results: [Movie], totalPages: Int, totalResults: Int) {
+        self.page = page
+        self.results = results
+        self.totalPages = totalPages
+        self.totalResults = totalResults
+    }
+
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
 

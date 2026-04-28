@@ -35,6 +35,11 @@ struct MovieListView: View {
                             }
                         }
 
+                        ActiveFiltersSection(
+                            title: vm.searchText,
+                            selectedYear: vm.selectedYear
+                        )
+
                         CategoryTabsSection(
                             selectedCategory: vm.selectedCategory,
                             onSelect: { category in
@@ -93,6 +98,46 @@ struct MovieListView: View {
             }
         }
         .animation(.easeInOut(duration: 0.25), value: vm.newMoviesBanner)
+    }
+}
+
+private struct ActiveFiltersSection: View {
+    let title: String
+    let selectedYear: String?
+
+    private var normalizedTitle: String? {
+        let value = title.trimmingCharacters(in: .whitespacesAndNewlines)
+        return value.isEmpty ? nil : value
+    }
+
+    var body: some View {
+        if normalizedTitle != nil || selectedYear != nil {
+            HStack(spacing: 10) {
+                if let normalizedTitle {
+                    filterChip(label: "Title: \(normalizedTitle)")
+                }
+                if let selectedYear {
+                    filterChip(label: "Year: \(selectedYear)")
+                }
+                Spacer(minLength: 0)
+            }
+        }
+    }
+
+    private func filterChip(label: String) -> some View {
+        Text(label)
+            .font(.system(size: 13, weight: .medium))
+            .foregroundStyle(.white.opacity(0.92))
+            .padding(.horizontal, 12)
+            .padding(.vertical, 8)
+            .background(
+                Capsule(style: .continuous)
+                    .fill(Color.red.opacity(0.26))
+                    .overlay(
+                        Capsule(style: .continuous)
+                            .stroke(Color.red.opacity(0.42), lineWidth: 1)
+                    )
+            )
     }
 }
 

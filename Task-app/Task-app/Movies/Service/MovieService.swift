@@ -57,11 +57,13 @@ class MovieService: MovieServiceProtocol {
         category: MovieCategory
     ) async throws -> MovieResponse {
         let normalizedQuery = query?.trimmingCharacters(in: .whitespacesAndNewlines)
+        let normalizedYear = year?.trimmingCharacters(in: .whitespacesAndNewlines)
         let hasQuery = !(normalizedQuery?.isEmpty ?? true)
+        let hasYear = !(normalizedYear?.isEmpty ?? true)
         let hasDateRange = fromDate != nil || toDate != nil
         let endpoint: String
 
-        if hasDateRange {
+        if hasDateRange || (hasYear && !hasQuery) {
             endpoint = "discover/movie"
         } else if hasQuery {
             endpoint = "search/movie"
@@ -90,8 +92,8 @@ class MovieService: MovieServiceProtocol {
             queryItems.append(URLQueryItem(name: "query", value: query))
         }
 
-        if let year, !year.isEmpty {
-            queryItems.append(URLQueryItem(name: "primary_release_year", value: year))
+        if let normalizedYear, !normalizedYear.isEmpty {
+            queryItems.append(URLQueryItem(name: "primary_release_year", value: normalizedYear))
         }
 
         if endpoint == "discover/movie" {
@@ -128,9 +130,65 @@ class MovieService: MovieServiceProtocol {
         }
 
         do {
-            return try JSONDecoder().decode(MovieResponse.self, from: data)
+            let response = try JSONDecoder().decode(MovieResponse.self, from: data)
+            let filteredResults = Self.applyLocalFilters(
+                response.results,
+                query: normalizedQuery,
+                year: normalizedYear,
+                fromDate: fromDate,
+                toDate: toDate
+            )
+
+            return MovieResponse(
+                page: response.page,
+                results: filteredResults,
+                totalPages: response.totalPages,
+                totalResults: filteredResults.count
+            )
         } catch {
             throw MovieServiceError.decodingError(error)
+        }
+    }
+
+    private static func applyLocalFilters(
+        _ movies: [Movie],
+        query: String?,
+        year: String?,
+        fromDate: Date?,
+        toDate: Date?
+    ) -> [Movie] {
+        let normalizedQuery = query?.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+        let normalizedYear = year?.trimmingCharacters(in: .whitespacesAndNewlines)
+
+        return movies.filter { movie in
+            if let normalizedQuery, !normalizedQuery.isEmpty {
+                let title = movie.title.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+                let original = movie.originalTitle.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+                if !title.contains(normalizedQuery) && !original.contains(normalizedQuery) {
+                    return false
+                }
+            }
+
+            if let normalizedYear, !normalizedYear.isEmpty {
+                let movieYear = String(movie.releaseDate.prefix(4))
+                if movieYear != normalizedYear {
+                    return false
+                }
+            }
+
+            if fromDate != nil || toDate != nil {
+                guard let releaseDate = isoDateFormatter.date(from: movie.releaseDate) else {
+                    return false
+                }
+                if let fromDate, releaseDate < fromDate {
+                    return false
+                }
+                if let toDate, releaseDate > toDate {
+                    return false
+                }
+            }
+
+            return true
         }
     }
 }
